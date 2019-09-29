@@ -139,21 +139,32 @@ class HardwareSerial : public Stream
     void _tx_udr_empty_irq(void);
 };
 
-#if defined(UBRRH) || defined(UBRR0H)
-  extern HardwareSerial Serial;
-  #define HAVE_HWSERIAL0
+#ifndef ARDUINO_HANDSOFF_UART
+	#if defined(UBRRH) || defined(UBRR0H)
+	  extern HardwareSerial Serial;
+	  #define HAVE_HWSERIAL0
+	#endif
 #endif
-#if defined(UBRR1H)
-  extern HardwareSerial Serial1;
-  #define HAVE_HWSERIAL1
+
+#ifndef ARDUINO_HANDSOFF_UART1
+	#if defined(UBRR1H)
+	  extern HardwareSerial Serial1;
+	  #define HAVE_HWSERIAL1
+	#endif
 #endif
-#if defined(UBRR2H)
-  extern HardwareSerial Serial2;
-  #define HAVE_HWSERIAL2
+
+#ifndef ARDUINO_HANDSOFF_UART2
+	#if defined(UBRR2H)
+	  extern HardwareSerial Serial2;
+	  #define HAVE_HWSERIAL2
+	#endif
 #endif
-#if defined(UBRR3H)
-  extern HardwareSerial Serial3;
-  #define HAVE_HWSERIAL3
+
+#ifndef ARDUINO_HANDSOFF_UART3
+	#if defined(UBRR3H)
+	  extern HardwareSerial Serial3;
+	  #define HAVE_HWSERIAL3
+	#endif
 #endif
 
 extern void serialEventRun(void) __attribute__((weak));

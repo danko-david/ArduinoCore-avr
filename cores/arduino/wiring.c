@@ -22,6 +22,8 @@
 
 #include "wiring_private.h"
 
+
+#ifndef ARDUINO_HANDSOFF_TIMER0
 // the prescaler is set so that timer0 ticks every 64 clock cycles, and the
 // the overflow handler is called every 256 ticks.
 #define MICROSECONDS_PER_TIMER0_OVERFLOW (clockCyclesToMicroseconds(64 * 256))
@@ -102,6 +104,8 @@ unsigned long micros() {
 	
 	return ((m << 8) + t) * (64 / clockCyclesPerMicrosecond());
 }
+
+#endif
 
 void delay(unsigned long ms)
 {
@@ -244,6 +248,7 @@ void init()
 	// work there
 	sei();
 	
+#ifndef ARDUINO_HANDSOFF_TIMER0
 	// on the ATmega168, timer 0 is also used for fast hardware pwm
 	// (using phase-correct PWM would mean that timer 0 overflowed half as often
 	// resulting in different millis() behavior on the ATmega8 and ATmega168)
@@ -281,6 +286,9 @@ void init()
 	#error	Timer 0 overflow interrupt not set correctly
 #endif
 
+#endif
+
+#ifndef ARDUINO_HANDSOFF_TIMER1
 	// timers 1 and 2 are used for phase-correct hardware pwm
 	// this is better for motors as it ensures an even waveform
 	// note, however, that fast pwm mode can achieve a frequency of up
@@ -305,6 +313,9 @@ void init()
 	sbi(TCCR1A, WGM10);
 #endif
 
+#endif //handsoff
+
+#ifndef ARDUINO_HANDSOFF_TIMER2
 	// set timer 2 prescale factor to 64
 #if defined(TCCR2) && defined(CS22)
 	sbi(TCCR2, CS22);
@@ -323,11 +334,19 @@ void init()
 	// Timer 2 not finished (may not be present on this CPU)
 #endif
 
+#endif //handsoff
+
+#ifndef ARDUINO_HANDSOFF_TIMER3
+
 #if defined(TCCR3B) && defined(CS31) && defined(WGM30)
 	sbi(TCCR3B, CS31);		// set timer 3 prescale factor to 64
 	sbi(TCCR3B, CS30);
 	sbi(TCCR3A, WGM30);		// put timer 3 in 8-bit phase correct pwm mode
 #endif
+
+#endif //handsoff
+
+#ifndef ARDUINO_HANDSOFF_TIMER4
 
 #if defined(TCCR4A) && defined(TCCR4B) && defined(TCCR4D) /* beginning of timer4 block for 32U4 and similar */
 	sbi(TCCR4B, CS42);		// set timer4 prescale factor to 64
@@ -344,11 +363,19 @@ void init()
 #endif
 #endif /* end timer4 block for ATMEGA1280/2560 and similar */	
 
+#endif //handsoff
+
+#ifndef ARDUINO_HANDSOFF_TIMER5
+
 #if defined(TCCR5B) && defined(CS51) && defined(WGM50)
 	sbi(TCCR5B, CS51);		// set timer 5 prescale factor to 64
 	sbi(TCCR5B, CS50);
 	sbi(TCCR5A, WGM50);		// put timer 5 in 8-bit phase correct pwm mode
 #endif
+
+#endif
+
+#ifndef ARDUINO_HANDSOFF_ADC
 
 #if defined(ADCSRA)
 	// set a2d prescaler so we are inside the desired 50-200 KHz range.
@@ -381,6 +408,9 @@ void init()
 	sbi(ADCSRA, ADEN);
 #endif
 
+#endif //handsoff
+
+#ifndef ARDUINO_HANDSOFF_UART
 	// the bootloader connects pins 0 and 1 to the USART; disconnect them
 	// here so they can be used as normal digital i/o; they will be
 	// reconnected in Serial.begin()
@@ -389,4 +419,6 @@ void init()
 #elif defined(UCSR0B)
 	UCSR0B = 0;
 #endif
+
+#endif //handsoff
 }
