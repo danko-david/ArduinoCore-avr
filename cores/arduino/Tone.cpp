@@ -494,6 +494,7 @@ void noTone(uint8_t _pin)
   digitalWrite(_pin, 0);
 }
 
+#ifndef ARDUINO_HANDSOFF_TIMER0
 #ifdef USE_TIMER0
 ISR(TIMER0_COMPA_vect)
 {
@@ -512,8 +513,9 @@ ISR(TIMER0_COMPA_vect)
   }
 }
 #endif
+#endif
 
-
+#ifndef ARDUINO_HANDSOFF_TIMER1
 #ifdef USE_TIMER1
 ISR(TIMER1_COMPA_vect)
 {
@@ -532,8 +534,9 @@ ISR(TIMER1_COMPA_vect)
   }
 }
 #endif
+#endif
 
-
+#ifndef ARDUINO_HANDSOFF_TIMER2
 #ifdef USE_TIMER2
 ISR(TIMER2_COMPA_vect)
 {
@@ -557,8 +560,9 @@ ISR(TIMER2_COMPA_vect)
   }
 }
 #endif
+#endif
 
-
+#ifndef ARDUINO_HANDSOFF_TIMER3
 #ifdef USE_TIMER3
 ISR(TIMER3_COMPA_vect)
 {
@@ -577,8 +581,9 @@ ISR(TIMER3_COMPA_vect)
   }
 }
 #endif
+#endif
 
-
+#ifndef ARDUINO_HANDSOFF_TIMER4
 #ifdef USE_TIMER4
 ISR(TIMER4_COMPA_vect)
 {
@@ -597,8 +602,9 @@ ISR(TIMER4_COMPA_vect)
   }
 }
 #endif
+#endif
 
-
+#ifndef ARDUINO_HANDSOFF_TIMER5
 #ifdef USE_TIMER5
 ISR(TIMER5_COMPA_vect)
 {
@@ -616,4 +622,5 @@ ISR(TIMER5_COMPA_vect)
     *timer5_pin_port &= ~(timer5_pin_mask);  // keep pin low after stop
   }
 }
+#endif
 #endif
